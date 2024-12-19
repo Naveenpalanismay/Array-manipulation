@@ -1,0 +1,43 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_N 10000000
+
+long arrayManipulation(int n, int m, int queries[m][3]) {
+    long *arr = (long *)calloc(n + 2, sizeof(long));  // Use calloc to initialize with 0
+    
+    // Perform operations using a difference array
+    for (int i = 0; i < m; i++) {
+        int a = queries[i][0];
+        int b = queries[i][1];
+        int k = queries[i][2];
+
+        arr[a] += k;        // Add k to start index
+        arr[b + 1] -= k;    // Subtract k from the next index after b
+    }
+    
+    // Find the maximum value using prefix sum
+    long max = 0, sum = 0;
+    for (int i = 1; i <= n; i++) {
+        sum += arr[i];
+        if (sum > max)
+            max = sum;
+    }
+    
+    free(arr);
+    return max;
+}
+
+int main() {
+    int n, m;
+    scanf("%d %d", &n, &m);
+
+    int queries[m][3];
+    for (int i = 0; i < m; i++) {
+        scanf("%d %d %d", &queries[i][0], &queries[i][1], &queries[i][2]);
+    }
+    
+    long result = arrayManipulation(n, m, queries);
+    printf("%ld\n", result);
+    return 0;
+}
